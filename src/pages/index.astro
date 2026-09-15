@@ -1,0 +1,101 @@
+---
+import { Equalizer } from "../components/Equalizer";
+import EventPhoto from "../components/EventPhoto.astro";
+import SplitBand from "../components/SplitBand.astro";
+import { copy, photos, services, site } from "../data/site";
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const audio = services[0];
+const visuals = services[1];
+const sfeer = services[2];
+---
+
+<SiteLayout>
+  <main id="main">
+    <SplitBand
+      alt={photos.publiek.alt}
+      caption={photos.publiek.caption}
+      src={photos.publiek.src}
+      variant="hero"
+    >
+      <p class="kicker">Audio en visuals</p>
+      <div class="heroBrand">
+        <h1>{site.shortName}</h1>
+        <Equalizer client:visible />
+      </div>
+      <p class="tagline">{site.tagline}</p>
+      <div class="heroCopy">
+        <p>
+          Live geluid, licht en sfeer voor nachten die energie nodig hebben.
+          Gevestigd in {site.location}.
+        </p>
+      </div>
+      <div class="actions">
+        <a class="button buttonPrimary" href="/contact">{copy.book}</a>
+        <a class="button buttonGhost" href="/werk">{copy.seeWork}</a>
+      </div>
+    </SplitBand>
+
+    <SplitBand
+      alt={photos.dansvloer.alt}
+      caption={photos.dansvloer.caption}
+      flip
+      src={photos.dansvloer.src}
+    >
+      <h2 class="sectionTitle">De ruimte, de nacht, de energie</h2>
+      <p class="heroCopy">
+        Van podiumlooks tot dansvloeren: NRG bouwt het geluid en licht waarmee
+        een ruimte een gevoel wordt.
+      </p>
+    </SplitBand>
+
+    <div class="photoGrid photoGridBleed">
+      <EventPhoto
+        alt={photos.strand.alt}
+        caption={photos.strand.caption}
+        src={photos.strand.src}
+      />
+      <EventPhoto
+        alt={photos.licht.alt}
+        caption={photos.licht.caption}
+        src={photos.licht.src}
+      />
+    </div>
+
+    <section class="wrap bandPad">
+      <h2 class="sectionTitle">Wat we meenemen</h2>
+      <div class="cards">
+        <article class="card">
+          <h3>{audio.title}</h3>
+          <p>{audio.body}</p>
+        </article>
+        <article class="card">
+          <h3>{visuals.title}</h3>
+          <p>{visuals.body}</p>
+        </article>
+        <article class="card">
+          <h3>{sfeer.title}</h3>
+          <p>{sfeer.body}</p>
+        </article>
+      </div>
+      <div class="actions">
+        <a class="button buttonGhost" href="/diensten">Alle diensten</a>
+      </div>
+    </section>
+
+    <SplitBand
+      alt={photos.podium.alt}
+      caption={photos.podium.caption}
+      src={photos.podium.src}
+    >
+      <h2 class="sectionTitle">Klaar voor de avond</h2>
+      <p class="heroCopy">
+        Vertel de datum en de ruimte. Wij brengen audio en visuals die de
+        sfeer dragen.
+      </p>
+      <div class="actions">
+        <a class="button buttonPrimary" href="/contact">{copy.book}</a>
+      </div>
+    </SplitBand>
+  </main>
+</SiteLayout>

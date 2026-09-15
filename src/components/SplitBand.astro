@@ -1,0 +1,39 @@
+---
+interface Props {
+  alt: string;
+  caption?: string;
+  flip?: boolean;
+  src: string;
+  variant?: "band" | "hero";
+}
+
+const { alt, caption, flip = false, src, variant = "band" } = Astro.props;
+const isHero = variant === "hero";
+const loading = isHero ? "eager" : "lazy";
+const fetchPriority = isHero ? "high" : "auto";
+const bandClass = [
+  "splitBand",
+  flip ? "splitBandFlip" : "",
+  isHero ? "splitBandHero" : "",
+]
+  .filter(Boolean)
+  .join(" ");
+const mediaClass = caption ? "splitMedia splitMediaCaptioned" : "splitMedia";
+---
+
+<section class={bandClass}>
+  <div class="splitCopy">
+    <slot />
+  </div>
+  <div class={mediaClass}>
+    <img
+      alt={alt}
+      class="parallaxImg"
+      fetchpriority={fetchPriority}
+      loading={loading}
+      src={src}
+    />
+    {isHero && <span class="heroScan"></span>}
+    {caption && <p class="splitCaption">{caption}</p>}
+  </div>
+</section>

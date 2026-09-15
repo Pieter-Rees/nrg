@@ -1,0 +1,36 @@
+---
+import EventPhoto from "../components/EventPhoto.astro";
+import { galleryPhotos } from "../data/site";
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const photoOne = galleryPhotos[0];
+const photoTwo = galleryPhotos[1];
+const photoThree = galleryPhotos[2];
+const photoFour = galleryPhotos[3];
+const photoFive = galleryPhotos[4];
+const photoSix = galleryPhotos[5];
+---
+
+<SiteLayout
+  description="Foto's van avonden met NRG Audio and Visuals: geluid, licht en sfeer op locatie."
+  title="Werk"
+>
+  <main id="main">
+    <header class="pageIntro">
+      <p class="kicker">Werk</p>
+      <h1 class="pageTitle">Nachten die je voelt</h1>
+      <p class="heroCopy">
+        Beelden van avonden waar geluid en licht samen de sfeer maakten. Van
+        strandtent tot club: de set staat, de ruimte leeft.
+      </p>
+    </header>
+    <div class="photoGrid photoGridBleed">
+      <EventPhoto alt={photoOne.alt} caption={photoOne.caption} src={photoOne.src} />
+      <EventPhoto alt={photoTwo.alt} caption={photoTwo.caption} src={photoTwo.src} />
+      <EventPhoto alt={photoThree.alt} caption={photoThree.caption} src={photoThree.src} />
+      <EventPhoto alt={photoFour.alt} caption={photoFour.caption} src={photoFour.src} />
+      <EventPhoto alt={photoFive.alt} caption={photoFive.caption} src={photoFive.src} />
+      <EventPhoto alt={photoSix.alt} caption={photoSix.caption} src={photoSix.src} />
+    </div>
+  </main>
+</SiteLayout>

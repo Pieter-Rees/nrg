@@ -1,0 +1,56 @@
+---
+import SplitBand from "../components/SplitBand.astro";
+import { copy, services } from "../data/site";
+import SiteLayout from "../layouts/SiteLayout.astro";
+
+const audio = services[0];
+const visuals = services[1];
+const sfeer = services[2];
+---
+
+<SiteLayout
+  description="Audio, visuals en sfeer voor live avonden, feesten en podiumkunsten."
+  title="Diensten"
+>
+  <main id="main">
+    <header class="pageIntro">
+      <p class="kicker">Diensten</p>
+      <h1 class="pageTitle">Geluid, licht, sfeer</h1>
+      <p class="heroCopy">
+        Drie dingen, één energie. We zetten audio en visuals in zodat de avond
+        niet alleen hoorbaar is, maar ook voelbaar.
+      </p>
+    </header>
+
+    <SplitBand
+      alt={audio.photo.alt}
+      caption={audio.photo.caption}
+      src={audio.photo.src}
+    >
+      <h2 class="sectionTitle">{audio.title}</h2>
+      <p class="heroCopy">{audio.body}</p>
+    </SplitBand>
+
+    <SplitBand
+      alt={visuals.photo.alt}
+      caption={visuals.photo.caption}
+      flip
+      src={visuals.photo.src}
+    >
+      <h2 class="sectionTitle">{visuals.title}</h2>
+      <p class="heroCopy">{visuals.body}</p>
+    </SplitBand>
+
+    <SplitBand
+      alt={sfeer.photo.alt}
+      caption={sfeer.photo.caption}
+      src={sfeer.photo.src}
+    >
+      <h2 class="sectionTitle">{sfeer.title}</h2>
+      <p class="heroCopy">{sfeer.body}</p>
+      <div class="actions">
+        <a class="button buttonPrimary" href="/contact">{copy.book}</a>
+      </div>
+    </SplitBand>
+  </main>
+</SiteLayout>

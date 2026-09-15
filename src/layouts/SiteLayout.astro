@@ -1,0 +1,53 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { SiteHeader } from "../components/SiteHeader";
+import StageLights from "../components/StageLights.astro";
+import { copy, site } from "../data/site";
+import "../styles/global.css";
+
+interface Props {
+  description?: string;
+  title?: string;
+}
+
+const { description = site.tagline, title = site.name } = Astro.props;
+const pageTitle = title === site.name ? site.name : `${title} · ${site.name}`;
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Manrope:wght@400;600;700&family=Oswald:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{pageTitle}</title>
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skipLink" href="#main">{copy.skipLink}</a>
+    <StageLights />
+    <div class="siteShell" id="top">
+      <div transition:persist="nrg-nav">
+        <SiteHeader brandName={site.name} client:load />
+      </div>
+      <slot />
+      <footer class="siteFooter">
+        <div class="wrap footerInner">
+          <span>{site.name}</span>
+          <a href={site.facebookUrl}>Facebook</a>
+        </div>
+      </footer>
+    </div>
+    <script>
+      import "../scripts/parallax";
+    </script>
+  </body>
+</html>

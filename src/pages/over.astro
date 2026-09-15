@@ -1,0 +1,46 @@
+---
+import SplitBand from "../components/SplitBand.astro";
+import { photos, site } from "../data/site";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  description="NRG Audio and Visuals uit Oostzaan: geluid en beeld als energie voor live avonden."
+  title="Over"
+>
+  <main id="main">
+    <SplitBand
+      alt={photos.djBooth.alt}
+      caption={photos.djBooth.caption}
+      src={photos.djBooth.src}
+      variant="hero"
+    >
+      <p class="kicker">Over</p>
+      <h1 class="pageTitle">{site.name}</h1>
+      <div class="about">
+        <p>
+          {site.name} is een eenmanszaak in {site.location} voor podiumkunsten
+          en live events. Geluid en beeld zijn hier geen losse klussen: ze zijn
+          één energie die sfeer wordt.
+        </p>
+        <p>
+          {site.tagline}.
+        </p>
+      </div>
+      <dl class="metaList">
+        <div>
+          <dt>Contact</dt>
+          <dd><a href={`mailto:${site.email}`}>{site.email}</a></dd>
+        </div>
+        <div>
+          <dt>Gevestigd in</dt>
+          <dd>{site.location}</dd>
+        </div>
+        <div>
+          <dt>Social</dt>
+          <dd><a href={site.facebookUrl}>Facebook</a></dd>
+        </div>
+      </dl>
+    </SplitBand>
+  </main>
+</SiteLayout>

@@ -1,0 +1,16 @@
+---
+interface Props {
+  alt: string;
+  caption?: string;
+  src: string;
+}
+
+const { alt, caption, src } = Astro.props;
+---
+
+<figure class="photoCard">
+  <div class="photoFrame">
+    <img alt={alt} class="parallaxImg" loading="lazy" src={src} />
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>

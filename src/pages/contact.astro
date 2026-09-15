@@ -1,0 +1,32 @@
+---
+import { ContactForm } from "../components/ContactForm";
+import SplitBand from "../components/SplitBand.astro";
+import { photos, site } from "../data/site";
+import SiteLayout from "../layouts/SiteLayout.astro";
+---
+
+<SiteLayout
+  description="Neem contact op met NRG Audio and Visuals voor geluid, licht en sfeer op jouw avond."
+  title="Contact"
+>
+  <main id="main">
+    <SplitBand
+      alt={photos.podium.alt}
+      caption={photos.podium.caption}
+      flip
+      src={photos.podium.src}
+      variant="hero"
+    >
+      <p class="kicker">Contact</p>
+      <h1 class="pageTitle">Praat met ons</h1>
+      <p class="heroCopy">
+        Vertel de datum, de ruimte en het gevoel dat je wilt. Wij komen terug
+        met hoe audio en visuals dat kunnen dragen.
+      </p>
+      <p class="heroCopy">
+        Of mail direct: <a href={`mailto:${site.email}`}>{site.email}</a>
+      </p>
+      <ContactForm client:load email={site.email} />
+    </SplitBand>
+  </main>
+</SiteLayout>
