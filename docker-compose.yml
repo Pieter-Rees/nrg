@@ -1,0 +1,10 @@
+services:
+  nrg:
+    build:
+      context: .
+      args:
+        SITE_URL: ${SITE_URL:-http://localhost:3004}
+    container_name: nrg-web
+    ports:
+      - "3004:3004"
+    restart: unless-stopped

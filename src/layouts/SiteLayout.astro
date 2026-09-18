@@ -1,8 +1,12 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { ClientRouter } from "astro:transitions";
 import { SiteHeader } from "../components/SiteHeader";
 import StageLights from "../components/StageLights.astro";
-import { copy, site } from "../data/site";
+import { getCopy } from "../data/copy";
+import { getLocale, getUnprefixedPath, type Locale } from "../data/locale";
+import { getJsonLd } from "../data/seo";
+import { site } from "../data/site";
 import "../styles/global.css";
 
 interface Props {
@@ -10,18 +14,90 @@ interface Props {
   title?: string;
 }
 
-const { description = site.tagline, title = site.name } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const copy = getCopy(locale);
+const pagePath = getUnprefixedPath(Astro.url.pathname);
+const brandHref = getRelativeLocaleUrl(locale);
+const { description = copy.tagline, title = site.name } = Astro.props;
 const pageTitle = title === site.name ? site.name : `${title} · ${site.name}`;
+const siteUrl = Astro.site ?? new URL(site.url);
+const imageUrl = new URL(site.ogImage, siteUrl).href;
+const ogLocale = locale === "en" ? "en_US" : "nl_NL";
+const ogLocaleAlternate = locale === "en" ? "nl_NL" : "en_US";
+
+function toNavItem(item: (typeof copy.nav)[number]) {
+  return {
+    href: getRelativeLocaleUrl(locale, item.path),
+    label: item.label,
+  };
+}
+
+function toPageUrl(targetLocale: Locale) {
+  const path = pagePath
+    ? getRelativeLocaleUrl(targetLocale, pagePath)
+    : getRelativeLocaleUrl(targetLocale);
+  return new URL(path, siteUrl).href;
+}
+
+const navItems = copy.nav.map(toNavItem);
+const languages = [
+  {
+    href: pagePath
+      ? getRelativeLocaleUrl("nl", pagePath)
+      : getRelativeLocaleUrl("nl"),
+    isCurrent: locale === "nl",
+    label: "NL",
+  },
+  {
+    href: pagePath
+      ? getRelativeLocaleUrl("en", pagePath)
+      : getRelativeLocaleUrl("en"),
+    isCurrent: locale === "en",
+    label: "EN",
+  },
+];
+const canonicalUrl = toPageUrl(locale);
+const nlUrl = toPageUrl("nl");
+const enUrl = toPageUrl("en");
+const jsonLd = JSON.stringify(
+  getJsonLd({
+    canonicalUrl,
+    description,
+    imageUrl,
+    inLanguage: locale,
+    pageTitle,
+    siteUrl: siteUrl.href,
+  }),
+);
 ---
 
 <!doctype html>
-<html lang="nl">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" hreflang="nl" href={nlUrl} />
+    <link rel="alternate" hreflang="en" href={enUrl} />
+    <link rel="alternate" hreflang="x-default" href={nlUrl} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:image:alt" content={copy.photos.publiek.alt} />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:locale:alternate" content={ogLocaleAlternate} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -29,15 +105,24 @@ const pageTitle = title === site.name ? site.name : `${title} · ${site.name}`;
       rel="stylesheet"
     />
     <title>{pageTitle}</title>
+    <script is:inline type="application/ld+json" set:html={jsonLd} />
     <ClientRouter />
   </head>
   <body>
     <a class="skipLink" href="#main">{copy.skipLink}</a>
     <StageLights />
     <div class="siteShell" id="top">
-      <div transition:persist="nrg-nav">
-        <SiteHeader brandName={site.name} client:load />
-      </div>
+      <SiteHeader
+        brandHref={brandHref}
+        brandName={site.name}
+        client:load
+        languageLabel={copy.languageLabel}
+        languages={languages}
+        menuClose={copy.menuClose}
+        menuOpen={copy.menuOpen}
+        menuToggle={copy.menuToggle}
+        navItems={navItems}
+      />
       <slot />
       <footer class="siteFooter">
         <div class="wrap footerInner">

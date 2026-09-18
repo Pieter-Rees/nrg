@@ -1,11 +1,26 @@
 import { type FormEvent, useState } from "react";
+import { fillTemplate } from "../data/copy";
+
+type ContactFormCopy = {
+  email: string;
+  eventName: string;
+  idleNote: string;
+  message: string;
+  name: string;
+  sentNote: string;
+  subject: string;
+  submit: string;
+};
 
 type ContactFormProps = {
+  copy: ContactFormCopy;
   email: string;
 };
 
-export function ContactForm({ email }: ContactFormProps) {
+export function ContactForm({ copy, email }: ContactFormProps) {
   const [isSent, setIsSent] = useState(false);
+  const idleNote = fillTemplate(copy.idleNote, { email });
+  const sentNote = fillTemplate(copy.sentNote, { email });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -14,9 +29,11 @@ export function ContactForm({ email }: ContactFormProps) {
     const fromEmail = String(formData.get("email") ?? "").trim();
     const eventName = String(formData.get("eventName") ?? "").trim();
     const message = String(formData.get("message") ?? "").trim();
-    const subject = encodeURIComponent(`NRG aanvraag van ${name}`);
+    const subject = encodeURIComponent(
+      fillTemplate(copy.subject, { name }),
+    );
     const body = encodeURIComponent(
-      `Naam: ${name}\nE-mail: ${fromEmail}\nEvenement: ${eventName}\n\n${message}`,
+      `${copy.name}: ${name}\n${copy.email}: ${fromEmail}\n${copy.eventName}: ${eventName}\n\n${message}`,
     );
 
     window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
@@ -24,41 +41,33 @@ export function ContactForm({ email }: ContactFormProps) {
   }
 
   function renderIdleNote() {
-    return (
-      <p className="formNote">
-        Opent je e-mailprogramma met een bericht klaar voor {email}.
-      </p>
-    );
+    return <p className="formNote">{idleNote}</p>;
   }
 
   function renderSentNote() {
-    return (
-      <p className="formNote">
-        Als je e-mailprogramma niet opent, mail ons op {email}.
-      </p>
-    );
+    return <p className="formNote">{sentNote}</p>;
   }
 
   return (
     <form className="contactForm" onSubmit={handleSubmit}>
       <label>
-        Naam
+        {copy.name}
         <input name="name" required type="text" />
       </label>
       <label>
-        E-mail
+        {copy.email}
         <input name="email" required type="email" />
       </label>
       <label>
-        Evenement
+        {copy.eventName}
         <input name="eventName" type="text" />
       </label>
       <label>
-        Bericht
+        {copy.message}
         <textarea name="message" required />
       </label>
       <button className="button buttonPrimary" type="submit">
-        Verstuur aanvraag
+        {copy.submit}
       </button>
       {isSent ? renderSentNote() : renderIdleNote()}
     </form>

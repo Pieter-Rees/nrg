@@ -1,35 +1,76 @@
 import { useState } from "react";
-import { copy, navItems } from "../data/site";
+import type { NavItem } from "../data/site";
 
-type SiteHeaderProps = {
-  brandName: string;
+type LanguageLink = {
+  href: string;
+  isCurrent: boolean;
+  label: string;
 };
 
-export function SiteHeader({ brandName }: SiteHeaderProps) {
+type SiteHeaderProps = {
+  brandHref: string;
+  brandName: string;
+  languageLabel: string;
+  languages: LanguageLink[];
+  menuClose: string;
+  menuOpen: string;
+  menuToggle: string;
+  navItems: NavItem[];
+};
+
+export function SiteHeader({
+  brandHref,
+  brandName,
+  languageLabel,
+  languages,
+  menuClose,
+  menuOpen,
+  menuToggle,
+  navItems,
+}: SiteHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const menuLabel = isOpen ? copy.menuClose : copy.menuOpen;
+  const menuButtonClassName = isOpen ? "menuButton isOpen" : "menuButton";
+  const menuLabel = isOpen ? menuClose : menuOpen;
   const navClassName = isOpen ? "nav navOpen" : "nav";
 
   function handleToggle() {
     setIsOpen((open) => !open);
   }
 
-  function handleNavigate() {
-    setIsOpen(false);
+  function isCurrentLanguage(item: LanguageLink) {
+    return item.isCurrent;
   }
 
-  function renderNavItem(item: (typeof navItems)[number]) {
+  function renderNavItem(item: NavItem) {
     return (
-      <a href={item.href} key={item.href} onClick={handleNavigate}>
+      <a href={item.href} key={item.href}>
         {item.label}
       </a>
     );
   }
 
+  function renderLanguageOption(item: LanguageLink) {
+    const className = item.isCurrent ? "isCurrent" : undefined;
+    return (
+      <a
+        aria-current={item.isCurrent ? "true" : undefined}
+        className={className}
+        data-astro-reload=""
+        href={item.href}
+        key={item.label}
+      >
+        {item.label}
+      </a>
+    );
+  }
+
+  const currentLanguage =
+    languages.find(isCurrentLanguage) ?? languages[0];
+
   return (
     <header className="siteHeader">
       <div className="wrap headerInner">
-        <a aria-label={brandName} className="brand" href="/">
+        <a aria-label={brandName} className="brand" href={brandHref}>
           <svg
             aria-hidden="true"
             className="brandMark"
@@ -80,16 +121,35 @@ export function SiteHeader({ brandName }: SiteHeaderProps) {
             </text>
           </svg>
         </a>
-        <button
-          aria-expanded={isOpen}
-          aria-label={copy.menuToggle}
-          className="menuButton"
-          onClick={handleToggle}
-          type="button"
-        >
-          {menuLabel}
-        </button>
-        <nav className={navClassName}>{navItems.map(renderNavItem)}</nav>
+        <div className="headerEnd">
+          <nav className={navClassName} id="siteNav">
+            {navItems.map(renderNavItem)}
+          </nav>
+          <span aria-hidden="true" className="navLangRule">
+            |
+          </span>
+          <details className="langSwitch">
+            <summary aria-label={languageLabel}>
+              {currentLanguage.label}
+            </summary>
+            <div className="langMenu">{languages.map(renderLanguageOption)}</div>
+          </details>
+          <button
+            aria-controls="siteNav"
+            aria-expanded={isOpen}
+            aria-label={menuToggle}
+            className={menuButtonClassName}
+            onClick={handleToggle}
+            type="button"
+          >
+            <span className="visuallyHidden">{menuLabel}</span>
+            <span aria-hidden="true" className="menuIcon">
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
       </div>
     </header>
   );

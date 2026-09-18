@@ -1,16 +1,27 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import { Equalizer } from "../components/Equalizer";
 import EventPhoto from "../components/EventPhoto.astro";
 import SplitBand from "../components/SplitBand.astro";
-import { copy, photos, services, site } from "../data/site";
+import { fillTemplate, getCopy } from "../data/copy";
+import { getLocale } from "../data/locale";
+import { getPhotos, getServices, site } from "../data/site";
 import SiteLayout from "../layouts/SiteLayout.astro";
 
+const locale = getLocale(Astro.currentLocale);
+const copy = getCopy(locale);
+const photos = getPhotos(locale);
+const services = getServices(locale);
 const audio = services[0];
 const visuals = services[1];
 const sfeer = services[2];
+const bookHref = getRelativeLocaleUrl(locale, "contact");
+const workHref = getRelativeLocaleUrl(locale, "werk");
+const servicesHref = getRelativeLocaleUrl(locale, "diensten");
+const homeIntro = fillTemplate(copy.home.intro, { location: site.location });
 ---
 
-<SiteLayout>
+<SiteLayout description={homeIntro}>
   <main id="main">
     <SplitBand
       alt={photos.publiek.alt}
@@ -18,21 +29,18 @@ const sfeer = services[2];
       src={photos.publiek.src}
       variant="hero"
     >
-      <p class="kicker">Audio en visuals</p>
+      <p class="kicker">{copy.home.kicker}</p>
       <div class="heroBrand">
         <h1>{site.shortName}</h1>
         <Equalizer client:visible />
       </div>
-      <p class="tagline">{site.tagline}</p>
+      <p class="tagline">{copy.tagline}</p>
       <div class="heroCopy">
-        <p>
-          Live geluid, licht en sfeer voor nachten die energie nodig hebben.
-          Gevestigd in {site.location}.
-        </p>
+        <p>{homeIntro}</p>
       </div>
       <div class="actions">
-        <a class="button buttonPrimary" href="/contact">{copy.book}</a>
-        <a class="button buttonGhost" href="/werk">{copy.seeWork}</a>
+        <a class="button buttonPrimary" href={bookHref}>{copy.book}</a>
+        <a class="button buttonGhost" href={workHref}>{copy.seeWork}</a>
       </div>
     </SplitBand>
 
@@ -42,11 +50,8 @@ const sfeer = services[2];
       flip
       src={photos.dansvloer.src}
     >
-      <h2 class="sectionTitle">De ruimte, de nacht, de energie</h2>
-      <p class="heroCopy">
-        Van podiumlooks tot dansvloeren: NRG bouwt het geluid en licht waarmee
-        een ruimte een gevoel wordt.
-      </p>
+      <h2 class="sectionTitle">{copy.home.heading}</h2>
+      <p class="heroCopy">{copy.home.spaceBody}</p>
     </SplitBand>
 
     <div class="photoGrid photoGridBleed">
@@ -63,7 +68,7 @@ const sfeer = services[2];
     </div>
 
     <section class="wrap bandPad">
-      <h2 class="sectionTitle">Wat we meenemen</h2>
+      <h2 class="sectionTitle">{copy.home.whatWeBring}</h2>
       <div class="cards">
         <article class="card">
           <h3>{audio.title}</h3>
@@ -79,7 +84,7 @@ const sfeer = services[2];
         </article>
       </div>
       <div class="actions">
-        <a class="button buttonGhost" href="/diensten">Alle diensten</a>
+        <a class="button buttonGhost" href={servicesHref}>{copy.allServices}</a>
       </div>
     </section>
 
@@ -88,13 +93,10 @@ const sfeer = services[2];
       caption={photos.podium.caption}
       src={photos.podium.src}
     >
-      <h2 class="sectionTitle">Klaar voor de avond</h2>
-      <p class="heroCopy">
-        Vertel de datum en de ruimte. Wij brengen audio en visuals die de
-        sfeer dragen.
-      </p>
+      <h2 class="sectionTitle">{copy.home.readyTitle}</h2>
+      <p class="heroCopy">{copy.home.readyBody}</p>
       <div class="actions">
-        <a class="button buttonPrimary" href="/contact">{copy.book}</a>
+        <a class="button buttonPrimary" href={bookHref}>{copy.book}</a>
       </div>
     </SplitBand>
   </main>

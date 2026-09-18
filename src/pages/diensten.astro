@@ -1,25 +1,26 @@
 ---
+import { getRelativeLocaleUrl } from "astro:i18n";
 import SplitBand from "../components/SplitBand.astro";
-import { copy, services } from "../data/site";
+import { getCopy } from "../data/copy";
+import { getLocale } from "../data/locale";
+import { getServices } from "../data/site";
 import SiteLayout from "../layouts/SiteLayout.astro";
 
+const locale = getLocale(Astro.currentLocale);
+const copy = getCopy(locale);
+const services = getServices(locale);
 const audio = services[0];
 const visuals = services[1];
 const sfeer = services[2];
+const bookHref = getRelativeLocaleUrl(locale, "contact");
 ---
 
-<SiteLayout
-  description="Audio, visuals en sfeer voor live avonden, feesten en podiumkunsten."
-  title="Diensten"
->
+<SiteLayout description={copy.diensten.description} title={copy.diensten.title}>
   <main id="main">
     <header class="pageIntro">
-      <p class="kicker">Diensten</p>
-      <h1 class="pageTitle">Geluid, licht, sfeer</h1>
-      <p class="heroCopy">
-        Drie dingen, één energie. We zetten audio en visuals in zodat de avond
-        niet alleen hoorbaar is, maar ook voelbaar.
-      </p>
+      <p class="kicker">{copy.diensten.kicker}</p>
+      <h1 class="pageTitle">{copy.diensten.heading}</h1>
+      <p class="heroCopy">{copy.diensten.intro}</p>
     </header>
 
     <SplitBand
@@ -49,7 +50,7 @@ const sfeer = services[2];
       <h2 class="sectionTitle">{sfeer.title}</h2>
       <p class="heroCopy">{sfeer.body}</p>
       <div class="actions">
-        <a class="button buttonPrimary" href="/contact">{copy.book}</a>
+        <a class="button buttonPrimary" href={bookHref}>{copy.book}</a>
       </div>
     </SplitBand>
   </main>

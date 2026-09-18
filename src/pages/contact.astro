@@ -1,14 +1,17 @@
 ---
 import { ContactForm } from "../components/ContactForm";
 import SplitBand from "../components/SplitBand.astro";
-import { photos, site } from "../data/site";
+import { getCopy } from "../data/copy";
+import { getLocale } from "../data/locale";
+import { getPhotos, site } from "../data/site";
 import SiteLayout from "../layouts/SiteLayout.astro";
+
+const locale = getLocale(Astro.currentLocale);
+const copy = getCopy(locale);
+const photos = getPhotos(locale);
 ---
 
-<SiteLayout
-  description="Neem contact op met NRG Audio and Visuals voor geluid, licht en sfeer op jouw avond."
-  title="Contact"
->
+<SiteLayout description={copy.contact.description} title={copy.contact.title}>
   <main id="main">
     <SplitBand
       alt={photos.podium.alt}
@@ -17,16 +20,14 @@ import SiteLayout from "../layouts/SiteLayout.astro";
       src={photos.podium.src}
       variant="hero"
     >
-      <p class="kicker">Contact</p>
-      <h1 class="pageTitle">Praat met ons</h1>
+      <p class="kicker">{copy.contact.kicker}</p>
+      <h1 class="pageTitle">{copy.contact.heading}</h1>
+      <p class="heroCopy">{copy.contact.intro}</p>
       <p class="heroCopy">
-        Vertel de datum, de ruimte en het gevoel dat je wilt. Wij komen terug
-        met hoe audio en visuals dat kunnen dragen.
+        {copy.contact.mailDirect}
+        <a href={`mailto:${site.email}`}>{site.email}</a>
       </p>
-      <p class="heroCopy">
-        Of mail direct: <a href={`mailto:${site.email}`}>{site.email}</a>
-      </p>
-      <ContactForm client:load email={site.email} />
+      <ContactForm client:load copy={copy.form} email={site.email} />
     </SplitBand>
   </main>
 </SiteLayout>
