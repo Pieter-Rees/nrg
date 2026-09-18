@@ -74,27 +74,9 @@ export function SiteHeader({
           <svg
             aria-hidden="true"
             className="brandMark"
-            viewBox="0 0 640 220"
+            viewBox="100 30 440 160"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <g
-              className="brandWaves"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeWidth="10"
-            >
-              <path d="M78 70v80" />
-              <path className="wavePulse" d="M58 88v44" />
-              <path className="wavePulse" d="M98 88v44" />
-              <path className="waveArc" d="M118 70c22 16 22 64 0 80" />
-              <path className="waveArc waveArcOuter" d="M138 52c36 28 36 88 0 116" />
-              <path d="M562 70v80" />
-              <path className="wavePulse" d="M542 88v44" />
-              <path className="wavePulse" d="M582 88v44" />
-              <path className="waveArc" d="M522 70c-22 16-22 64 0 80" />
-              <path className="waveArc waveArcOuter" d="M502 52c-36 28-36 88 0 116" />
-            </g>
             <text
               fill="currentColor"
               fontFamily="Oswald, Impact, sans-serif"

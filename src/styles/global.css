@@ -1281,16 +1281,6 @@ section {
 .eqBar:nth-child(7) { animation-delay: 0.28s; }
 .eqBar:nth-child(8) { animation-delay: 0.16s; }
 
-.wavePulse,
-.waveArc {
-  transform-origin: center;
-  animation: wavePulse 1.5s ease-in-out infinite;
-}
-
-.waveArcOuter {
-  animation-delay: 0.25s;
-}
-
 .kicker,
 .heroBrand,
 .tagline,
@@ -1360,16 +1350,6 @@ section {
   }
   50% {
     height: 100%;
-  }
-}
-
-@keyframes wavePulse {
-  0%,
-  100% {
-    opacity: 0.45;
-  }
-  50% {
-    opacity: 1;
   }
 }
 
@@ -1520,8 +1500,6 @@ section {
   .eqBar,
   .heroPhoto,
   .heroScan,
-  .wavePulse,
-  .waveArc,
   .buttonPrimary,
   .kicker,
   .heroBrand,
